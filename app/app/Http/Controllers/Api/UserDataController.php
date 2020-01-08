@@ -31,23 +31,20 @@ class UserDataController extends Controller
         return new UserDataResource($userData);
     }
 
-    public function update($id, Request $request)
+    public function update(UserData $userData, Request $request)
     {
         $data = $request->validate([
             'user_id' => 'required|integer',
             'params' => 'required|json',
         ]);
 
-        $userData = UserData::findOrFail($id);
-
         $userData->update($data);
 
         return new UserDataResource($userData);
     }
 
-    public function destroy($id)
+    public function destroy(UserData $userData)
     {
-        $userData = UserData::findOrFail($id);
         $userData->delete();
 
         return response(null, 204);
