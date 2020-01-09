@@ -13,8 +13,6 @@ class UserDataController extends Controller
 {
     public function index()
     {
-        $userData = UserData::first()->update(['params->name' => 'Bla bla']);
-
         return new UserDataResource(UserData::first());
     }
 
