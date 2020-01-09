@@ -20,7 +20,7 @@ class UserDataController extends Controller
     {
         $userData = new UserData();
         $userData->user_id = 1;
-        $userData->params = $request->all();
+        $userData->params = $request->only(['name', 'profession', 'places']);
         $userData->save();
 
         return new UserDataResource($userData);
