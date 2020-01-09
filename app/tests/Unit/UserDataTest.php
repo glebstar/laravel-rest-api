@@ -40,6 +40,23 @@ class UserDataTest extends TestCase
                     'name' => 'Google',
                     'date_from' => '2019-12-01',
                     'date_to' => '2019-12-31',
+                    'description' => 'This is description',
+                    'incorrect' => 'incorrect'
+                ],
+            ],
+
+        ]);
+
+        $this->assertEquals ('Invalid array places.', json_decode ($response->content(), true)['errors']['places'][0]);
+
+        $response = $this->json('POST', 'api/data', [
+            'name' => 'John',
+            'profession' => 'Laravel developer',
+            'places' => [
+                [
+                    'name' => 'Google',
+                    'date_from' => '2019-12-01',
+                    'date_to' => '2019-12-31',
                     'description' => 'This is description'
                 ],
                 [
