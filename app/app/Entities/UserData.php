@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,4 +19,13 @@ class UserData extends Model
      * @var array
      */
     protected $fillable = ['user_id', 'params'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'params' => 'array',
+    ];
 }

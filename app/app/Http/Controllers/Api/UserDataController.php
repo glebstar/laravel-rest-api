@@ -5,41 +5,32 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserData as UserDataResource;
-use App\UserData;
+use App\Repositories\UserData;
+use App\Http\Requests\StoreUserData;
+use App\Http\Requests\UpdateUserData;
 
 class UserDataController extends Controller
 {
     public function index()
     {
-        $data = UserData::first();
-        if ($data) {
-            return new UserDataResource($data);
-        }
+        $userData = UserData::first()->update(['params->name' => 'Bla bla']);
 
-        return response()->json([]);
+        return new UserDataResource(UserData::first());
     }
 
-    public function store(Request $request)
+    public function store(StoreUserData $request)
     {
-        $data = $request->validate([
-            'user_id' => 'required|integer',
-            'params' => 'required|json',
-        ]);
-
-        $userData = UserData::create($data);
+        $userData = new UserData();
+        $userData->user_id = 1;
+        $userData->params = $request->all();
+        $userData->save();
 
         return new UserDataResource($userData);
     }
 
-    public function update(UserData $userData, Request $request)
+    public function update(UserData $userData, UpdateUserData $request)
     {
-        $data = $request->validate([
-            'user_id' => 'required|integer',
-            'params' => 'required|json',
-        ]);
-
-        $userData->update($data);
-
+        $userData->updateData($request);
         return new UserDataResource($userData);
     }
 
@@ -47,6 +38,6 @@ class UserDataController extends Controller
     {
         $userData->delete();
 
-        return response(null, 204);
+        return new UserDataResource($userData);
     }
 }

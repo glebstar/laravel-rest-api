@@ -19,17 +19,37 @@ class UserDataTest extends TestCase
         $this->assertEquals ('The given data was invalid.', json_decode ($response->content ())->message);
 
         $response = $this->json('POST', 'api/data', [
-            'user_id' => 1,
-            'params' => json_encode([
-                'name' => 'John',
-                'profession' => 'Laravel developer',
-                'places' => [
+            'profession' => 'Laravel developer',
+            'places' => [
+                [
                     'name' => 'Google',
                     'date_from' => '2019-12-01',
                     'date_to' => '2019-12-31',
                     'description' => 'This is description'
                 ],
-            ]),
+            ],
+        ]);
+
+        $this->assertEquals ('The name field is required.', json_decode ($response->content(), true)['errors']['name'][0]);
+
+        $response = $this->json('POST', 'api/data', [
+            'name' => 'John',
+            'profession' => 'Laravel developer',
+            'places' => [
+                [
+                    'name' => 'Google',
+                    'date_from' => '2019-12-01',
+                    'date_to' => '2019-12-31',
+                    'description' => 'This is description'
+                ],
+                [
+                    'name' => 'Bingo',
+                    'date_from' => '2019-01-01',
+                    'date_to' => '2019-01-08',
+                    'description' => 'This is description'
+                ],
+            ],
+
         ]);
 
         $this->assertEquals (1, json_decode ($response->content ())->data->user_id);
@@ -47,20 +67,18 @@ class UserDataTest extends TestCase
     public function testUpdate($userId)
     {
         $response = $this->json('PUT', 'api/data/' . $userId, [
-            'user_id' => 2,
-            'params' => json_encode([
-                'name' => 'John Smith',
-                'profession' => 'Laravel developer',
-                'places' => [
-                    'name' => 'Google',
-                    'date_from' => '2019-12-01',
-                    'date_to' => '2019-12-31',
+            'name' => 'John Smith',
+            'places' => [
+                [
+                    'name' => 'Yahoo',
+                    'date_from' => '2019-01-01',
+                    'date_to' => '2019-01-08',
                     'description' => 'This is description'
                 ],
-            ]),
+            ],
         ]);
 
-        $this->assertEquals (2, json_decode ($response->content ())->data->user_id);
+        $this->assertEquals ('John Smith', json_decode ($response->content ())->data->params->name);
 
         return $userId;
     }
@@ -75,6 +93,6 @@ class UserDataTest extends TestCase
     public function testDelete($userId)
     {
         $response = $this->json('DELETE', 'api/data/' . $userId);
-        $this->assertEquals (204, json_decode ($response->status ()));
+        $this->assertEquals (1, json_decode ($response->content())->data->user_id);
     }
 }
