@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\CorrectFields;
 
 class UpdateUserData extends FormRequest
 {
@@ -26,7 +27,7 @@ class UpdateUserData extends FormRequest
         return [
             'name' => 'sometimes|string|max:100',
             'profession' => 'sometimes|string|max:100',
-            'places' => 'sometimes|array',
+            'places' => ['sometimes', 'array', new CorrectFields],
             'places.*.name' => 'required|string|max:100',
             'places.*.date_from' => 'required|date',
             'places.*.date_to' => 'required|date',
