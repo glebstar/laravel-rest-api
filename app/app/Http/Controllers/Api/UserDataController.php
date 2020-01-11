@@ -36,6 +36,6 @@ class UserDataController extends Controller
     {
         $userData->delete();
 
-        return new UserDataResource($userData);
+        return response(null, 204);
     }
 }

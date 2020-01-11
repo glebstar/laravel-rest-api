@@ -79,7 +79,7 @@ class UserDataTest extends TestCase
      * @param integer $userId User Id
      * @depends testStore
      *
-     * @return integer
+     * @return void
      */
     public function testUpdate($userId)
     {
@@ -96,8 +96,6 @@ class UserDataTest extends TestCase
         ]);
 
         $this->assertEquals ('John Smith', json_decode ($response->content ())->data->params->name);
-
-        return $userId;
     }
 
     /**
@@ -110,6 +108,6 @@ class UserDataTest extends TestCase
     public function testDelete($userId)
     {
         $response = $this->json('DELETE', 'api/data/' . $userId);
-        $this->assertEquals (1, json_decode ($response->content())->data->user_id);
+        $this->assertEquals (204, json_decode ($response->status()));
     }
 }
